@@ -1,9 +1,11 @@
 import 'package:chatting_app/chatroom.dart';
+import 'package:chatting_app/searchpage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'searchpage.dart';
 
 class Home extends StatefulWidget {
   final User user;
@@ -22,8 +24,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        title: Text('${widget.user.username}'),
+        title: Text('Your Friends'),
         automaticallyImplyLeading: false,
         actions: <Widget>[
           FlatButton.icon(
@@ -43,8 +46,8 @@ class _HomeState extends State<Home> {
           ),
         ],
       ),
-      body: FutureBuilder<List<User>>(
-          future: getAllUsers(),
+      body: StreamBuilder<List<User>>(
+          stream: getAllUsers(),
           builder: (BuildContext context, AsyncSnapshot<List<User>> snapshot) {
             if (snapshot.hasData) {
               return ListView.separated(
@@ -53,26 +56,29 @@ class _HomeState extends State<Home> {
                       Divider(height: 3, color: Colors.grey),
                   itemBuilder: (context, index) {
                     final item = snapshot.data[index];
-                    return ListTile(
-                      leading: Icon(Icons.account_circle),
-                      title: Text('${item.username}'),
-                      trailing: FlatButton(
-                        textColor: Colors.white,
-                        disabledColor: Colors.blue[200],
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: Colors.blue[900])),
-                        color: Colors.blue,
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ChatRoom(
-                                        user1: widget.user,
-                                        user2: item,
-                                      )));
-                        },
-                        child: Text('Chat'),
+                    return Container(
+                      color: Colors.blue,
+                      child: ListTile(
+                        leading: Icon(Icons.account_circle),
+                        title: Text('${item.username}'),
+                        trailing: FlatButton(
+                          textColor: Colors.white,
+                          disabledColor: Colors.blue[200],
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.blue[900])),
+                          color: Colors.blue,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChatRoom(
+                                          user1: widget.user,
+                                          user2: item,
+                                        )));
+                          },
+                          child: Text('Chat'),
+                        ),
                       ),
                     );
                   });
@@ -80,43 +86,54 @@ class _HomeState extends State<Home> {
               return Center(child: CircularProgressIndicator());
             }
           }),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     getAllUsers();
-      //   },
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => SearchPage(
+                        user: widget.user,
+                        fn: setState,
+                      )));
+        },
+      ),
     );
   }
 
   Future<void> signOut(FirebaseAuth auth) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('email','email');
-      prefs.setString('password','password');
+      prefs.setString('email', 'email');
+      prefs.setString('password', 'password');
       return await auth.signOut();
     } catch (e) {
       print(e.toString());
     }
   }
 
-  Future<List<User>> getAllUsers() async {
-    // User user;
-    final QuerySnapshot result =
-        await Firestore.instance.collection('users').getDocuments();
-    final List<DocumentSnapshot> documents = result.documents;
-    List<User> l = List<User>();
-    documents.forEach((data) {
-      Map<String, dynamic> mp = data.data;
-      print(mp['uid']);
-      print(widget.user.uid);
-      if (mp['uid'] != widget.user.uid) {
-        l.add(User(
-          uid: mp['uid'],
-          username: mp['username'],
-          email: mp['email'],
-        ));
-      }
-    });
-    return l;
+  Stream<List<User>> getAllUsers() async* {
+    DocumentSnapshot docRef = await Firestore.instance
+        .collection('users')
+        .document(widget.user.uid)
+        .get();
+    print(docRef['email']);
+    List<String> uids = List.from(docRef['friends']);
+    print('number of friends: ${uids.length}');
+    List<User> ll = List<User>();
+    for (int i = 0; i < uids.length; i++) {
+      print('this is it: ${uids[i]}');
+      DocumentSnapshot tempDocRef =
+          await Firestore.instance.collection('users').document(uids[i]).get();
+      print(tempDocRef['username']);
+      ll.add(User(
+          uid: tempDocRef['uid'],
+          username: tempDocRef['username'],
+          email: tempDocRef['email']));
+      print(ll.length);
+    }
+    print(ll.length);
+    yield ll;
+    // setState(() {
+    // });
   }
 }
