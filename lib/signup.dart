@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
 import 'loading.dart';
 import 'user.dart';
@@ -15,6 +14,7 @@ class _SignUpState extends State<SignUp> {
   String _email, _password;
   String _username;
   bool loading = false;
+  bool _isCorrect = true;
   String error = "";
   final databaseReference = Firestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -56,6 +56,8 @@ class _SignUpState extends State<SignUp> {
                         validator: (input) {
                           if (input.isEmpty) {
                             return 'please enter your email';
+                          } else if (!_isCorrect) {
+                            return 'already exists or incorrect';
                           }
                           return null;
                         },
@@ -149,9 +151,6 @@ class _SignUpState extends State<SignUp> {
         loading = true;
       });
       try {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('email', _email);
-        prefs.setString('password', _password);
         FirebaseUser fuser = (await _auth.createUserWithEmailAndPassword(
                 email: _email, password: _password))
             .user;
@@ -160,6 +159,7 @@ class _SignUpState extends State<SignUp> {
         }, onError: (er) {
           print(er);
         });
+        print('registered!');
         setState(() {
           loading = false;
         });
@@ -171,7 +171,12 @@ class _SignUpState extends State<SignUp> {
                       auth: _auth,
                     )));
         print(user.email);
+        
       } catch (e) {
+        setState(() {
+          _isCorrect = false;
+          loading = false;
+        });
         print(e.message);
         print("here");
       }
@@ -179,10 +184,14 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<User> registerUser(FirebaseUser fuser) async {
+    print('registering');
     await databaseReference.collection("users").document(fuser.uid).setData({
       'username': _username,
       'uid': fuser.uid,
       'email': fuser.email,
+      'searchKey': _username[0],
+      'friends': List<dynamic>(),
+      'color': 'Blue',
     });
     return User(username: _username, uid: fuser.uid, email: fuser.email);
   }

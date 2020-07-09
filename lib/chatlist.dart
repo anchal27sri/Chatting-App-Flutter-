@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'user.dart';
+import 'package:chatting_app/colorsmap.dart';
 
 class ChatListWidget extends StatelessWidget {
   final String roomId;
@@ -58,7 +59,7 @@ class ChatListWidget extends StatelessWidget {
                         : BorderRadius.only(
                             topLeft: Radius.circular(15.0),
                             bottomRight: Radius.circular(15.0)),
-                    color: Colors.blue,
+                    color: (mp['uid'] == curUser.uid)?ColorMap().choiceColorMap[curUser.color]['normal']:ColorMap().choiceColorMap[chatWithUser.color]['normal'],
                   ),
                   child: Column(
                     crossAxisAlignment: (mp['uid'] == curUser.uid)

@@ -29,19 +29,18 @@ class _SearchPageState extends State<SearchPage> {
       SearchService().searchByName(value).then((QuerySnapshot docs) {
         print(docs.documents.length);
         for (int i = 0; i < docs.documents.length; ++i) {
-          // print(docs.documents[i].data);
-          queryResultSet.add(docs.documents[i].data);
-          setState(() {
-            tempSearchStore.add(queryResultSet[i]);
-          });
+          if (docs.documents[i].data['uid'] != widget.user.uid) {
+            queryResultSet.add(docs.documents[i].data);
+            setState(() {
+              tempSearchStore.add(queryResultSet[i]);
+            });
+          }
         }
       });
-      // setState(() {});
     } else {
       tempSearchStore = [];
 
       queryResultSet.forEach((element) {
-        // print(element['username']);
         if (element['username'].startsWith(value)) {
           setState(() {
             tempSearchStore.add(element);

@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
         title: Text('Your Friends'),
+        backgroundColor: Colors.blue[900],
         automaticallyImplyLeading: false,
         actions: <Widget>[
           FlatButton.icon(
@@ -69,6 +70,8 @@ class _HomeState extends State<Home> {
                               side: BorderSide(color: Colors.blue[900])),
                           color: Colors.blue,
                           onPressed: () {
+                            print(widget.user.color);
+                            print(item.color);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -87,6 +90,10 @@ class _HomeState extends State<Home> {
             }
           }),
       floatingActionButton: FloatingActionButton(
+        child: Icon(
+          Icons.add,
+          size: 40,
+        ),
         onPressed: () {
           Navigator.push(
               context,
@@ -126,6 +133,7 @@ class _HomeState extends State<Home> {
           await Firestore.instance.collection('users').document(uids[i]).get();
       print(tempDocRef['username']);
       ll.add(User(
+          color: tempDocRef['color'],
           uid: tempDocRef['uid'],
           username: tempDocRef['username'],
           email: tempDocRef['email']));

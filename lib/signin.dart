@@ -190,6 +190,7 @@ class _SignInState extends State<SignIn> {
         username: mp['username'],
         email: _email,
         uid: fuser.uid,
+        color: mp['color'],
       );
     });
     print(user.username);

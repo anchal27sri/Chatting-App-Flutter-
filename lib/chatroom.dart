@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:random_string/random_string.dart';
+import 'package:chatting_app/colorsmap.dart';
 // import 'package:quiver/time.dart';
 
 class ChatRoom extends StatefulWidget {
@@ -34,10 +35,10 @@ class _ChatRoomState extends State<ChatRoom> {
     // ThemeData.primaryColor = Colors.blue;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.blue[200],
+        backgroundColor: ColorMap().choiceColorMap[widget.user1.color]['light'],
         appBar: AppBar(
           title: Text('${widget.user2.username}'),
-          backgroundColor: Colors.blue[900],
+          backgroundColor: ColorMap().choiceColorMap[widget.user1.color]['dark'],
           elevation: 50,
           // automaticallyImplyLeading: false,
         ),
@@ -55,7 +56,7 @@ class _ChatRoomState extends State<ChatRoom> {
                   color: Colors.white,
                 ),
                 Container(
-                  color: Colors.grey[900],
+                  color: ColorMap().choiceColorMap[widget.user1.color]['dark'],
                   child: Row(
                     children: <Widget>[
                       Form(
