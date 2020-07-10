@@ -1,24 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'home.dart';
-import 'signup.dart';
-import 'loading.dart';
-import 'user.dart';
+import '../pages/home.dart';
+import '../models/loading.dart';
+import '../models/user.dart';
 
-class SignIn extends StatefulWidget {
+class SignUp extends StatefulWidget {
   @override
-  _SignInState createState() => _SignInState();
+  _SignUpState createState() => _SignUpState();
 }
 
-class _SignInState extends State<SignIn> {
-  bool loading = false;
-  String error;
+class _SignUpState extends State<SignUp> {
   String _email, _password;
-  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  String _username;
+  bool loading = false;
+  bool _isCorrect = true;
+  String error = "";
   final databaseReference = Firestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -39,7 +40,14 @@ class _SignInState extends State<SignIn> {
                 child: ListView(
                   children: <Widget>[
                     SizedBox(
-                      height: 40,
+                      height: 30,
+                    ),
+                    Container(
+                      child: Center(
+                          child: Text(
+                        'Register',
+                        style: TextStyle(fontSize: 40.0),
+                      )),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -47,15 +55,14 @@ class _SignInState extends State<SignIn> {
                       child: TextFormField(
                         validator: (input) {
                           if (input.isEmpty) {
-                            return 'please type your email';
+                            return 'please enter your email';
+                          } else if (!_isCorrect) {
+                            return 'already exists or incorrect';
                           }
                           return null;
                         },
                         decoration: InputDecoration(
-                            labelText: 'Email',
-                            border: OutlineInputBorder(
-                                // borderSide: BorderSide(color: Colors.green),
-                                )),
+                            labelText: 'Email', border: OutlineInputBorder()),
                         onSaved: (input) => (_email = input),
                       ),
                     ),
@@ -71,22 +78,35 @@ class _SignInState extends State<SignIn> {
                         },
                         decoration: InputDecoration(
                             labelText: 'Password',
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.green),
-                            )),
+                            border: OutlineInputBorder()),
                         obscureText: true,
                         onSaved: (input) => (_password = input),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 140, vertical: 8),
+                          horizontal: 40, vertical: 8.0),
+                      child: TextFormField(
+                        validator: (input) {
+                          if (input.isEmpty) {
+                            return 'please enter your username';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                            labelText: 'Name', border: OutlineInputBorder()),
+                        onSaved: (input) => (_username = input),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 130, vertical: 8),
                       child: RaisedButton(
                         onPressed: () {
-                          signIn();
+                          signUp();
                         },
                         child: Text(
-                          'Sign In',
+                          'Sign up',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -99,30 +119,22 @@ class _SignInState extends State<SignIn> {
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 40, vertical: 8),
-                      child: Container(child: Text('Do not have an account?')),
+                      child: Container(child: Text('Already have an account?')),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(40, 0, 250, 0),
                       child: GestureDetector(
                         child: Text(
-                          'Sign up',
+                          'Sign In',
                           style: TextStyle(fontSize: 20.0, color: Colors.blue),
                         ),
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SignUp()));
+                          Navigator.pop(context);
                         },
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Center(
-                          child: Text(
-                        error,
-                        style: TextStyle(color: Colors.red),
-                      )),
+                    SizedBox(
+                      height: 40,
                     ),
                   ],
                 ),
@@ -131,31 +143,23 @@ class _SignInState extends State<SignIn> {
           );
   }
 
-  Future<void> signIn() async {
+  Future<void> signUp() async {
     final formstate = _formkey.currentState;
-    print('hello');
-    print(_email);
-
     if (formstate.validate()) {
       formstate.save();
       setState(() {
         loading = true;
       });
       try {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('email', _email);
-        prefs.setString('password', _password);
-        FirebaseUser fuser = (await _auth.signInWithEmailAndPassword(
+        FirebaseUser fuser = (await _auth.createUserWithEmailAndPassword(
                 email: _email, password: _password))
             .user;
-        print('1:' + fuser.toString());
-        dynamic user = await fetchUserData(fuser).then((value) {
+        dynamic user = await registerUser(fuser).then((value) {
           return value;
         }, onError: (er) {
           print(er);
         });
-        print(user.email);
-        error = "";
+        print('registered!');
         setState(() {
           loading = false;
         });
@@ -167,33 +171,28 @@ class _SignInState extends State<SignIn> {
                       auth: _auth,
                     )));
         print(user.email);
+        
       } catch (e) {
-        error = e.toString();
-        print("here");
         setState(() {
+          _isCorrect = false;
           loading = false;
         });
+        print(e.message);
+        print("here");
       }
     }
   }
 
-  Future<User> fetchUserData(FirebaseUser fuser) async {
-    User user;
-    await databaseReference
-        .collection("users")
-        .document(fuser.uid)
-        .get()
-        .then((DocumentSnapshot snapshot) {
-      Map<String, dynamic> mp = snapshot.data;
-      // print(mp);
-      user = User(
-        username: mp['username'],
-        email: _email,
-        uid: fuser.uid,
-        color: mp['color'],
-      );
+  Future<User> registerUser(FirebaseUser fuser) async {
+    print('registering');
+    await databaseReference.collection("users").document(fuser.uid).setData({
+      'username': _username,
+      'uid': fuser.uid,
+      'email': fuser.email,
+      'searchKey': _username[0],
+      'friends': List<dynamic>(),
+      'color': 'Blue',
     });
-    print(user.username);
-    return user;
+    return User(username: _username, uid: fuser.uid, email: fuser.email);
   }
 }

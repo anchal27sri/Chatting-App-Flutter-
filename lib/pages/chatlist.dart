@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'user.dart';
-import 'package:chatting_app/colorsmap.dart';
+import '../models/user.dart';
+import 'package:chatting_app/models/colorsmap.dart';
 
 class ChatListWidget extends StatelessWidget {
   final String roomId;

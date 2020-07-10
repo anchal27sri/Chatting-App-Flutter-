@@ -1,8 +1,8 @@
-import 'package:chatting_app/chatroom.dart';
-import 'package:chatting_app/searchpage.dart';
+import 'package:chatting_app/pages/chatroom.dart';
+import 'package:chatting_app/pages/searchpage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'user.dart';
+import '../models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'searchpage.dart';

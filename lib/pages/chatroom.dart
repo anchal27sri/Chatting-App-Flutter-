@@ -1,9 +1,9 @@
-import 'package:chatting_app/chatlist.dart';
+import 'package:chatting_app/pages/chatlist.dart';
 import 'package:flutter/material.dart';
-import 'user.dart';
+import '../models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:random_string/random_string.dart';
-import 'package:chatting_app/colorsmap.dart';
+import 'package:chatting_app/models/colorsmap.dart';
 // import 'package:quiver/time.dart';
 
 class ChatRoom extends StatefulWidget {
