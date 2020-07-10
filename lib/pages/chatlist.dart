@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user.dart';
 import 'package:chatting_app/models/colorsmap.dart';
-// import '../models/authentication.dart';
 
 class ChatListWidget extends StatelessWidget {
   final String roomId;
@@ -37,11 +36,8 @@ class ChatListWidget extends StatelessWidget {
   }
 
   ListTile buildItem(int index, Map<String, dynamic> mp) {
-    // print(mp['uid']);
-    // print(widget.user1.uid);
     DateTime dateTime = mp['time'].toDate();
     String time = '${dateTime.hour}:${dateTime.minute}';
-    // print(time);
     return ListTile(
       title: Wrap(
           alignment: (mp['uid'] == curUser.uid)
@@ -59,7 +55,10 @@ class ChatListWidget extends StatelessWidget {
                         : BorderRadius.only(
                             topLeft: Radius.circular(15.0),
                             bottomRight: Radius.circular(15.0)),
-                    color: (mp['uid'] == curUser.uid)?ColorMap().choiceColorMap[curUser.color]['dark']:ColorMap().choiceColorMap[chatWithUser.color]['normal'],
+                    color: (mp['uid'] == curUser.uid)
+                        ? ColorMap().choiceColorMap[curUser.color]['dark']
+                        : ColorMap().choiceColorMap[chatWithUser.color]
+                            ['normal'],
                   ),
                   child: Column(
                     crossAxisAlignment: (mp['uid'] == curUser.uid)
@@ -99,13 +98,15 @@ class ChatListWidget extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
                         child: Text(
                           time,
                           textAlign: TextAlign.end,
                           style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey,fontWeight: FontWeight.bold),
+                              fontSize: 10,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],

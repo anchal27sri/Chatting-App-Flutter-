@@ -64,7 +64,6 @@ class _SignInState extends State<SignIn> {
                         decoration: InputDecoration(
                             labelText: 'Email',
                             border: OutlineInputBorder(
-                                // borderSide: BorderSide(color: Colors.green),
                                 )),
                         onSaved: (input) => (_email = input),
                       ),
@@ -169,8 +168,6 @@ class _SignInState extends State<SignIn> {
         setState(() {
           loading = false;
         });
-        // Authenticate(user: user, auth: _auth);
-        // Authenticate().user = user;
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(

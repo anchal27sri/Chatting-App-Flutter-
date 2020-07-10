@@ -4,8 +4,6 @@ import '../models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:random_string/random_string.dart';
 import 'package:chatting_app/models/colorsmap.dart';
-// import '../models/authentication.dart';
-// import 'package:quiver/time.dart';
 
 class ChatRoom extends StatefulWidget {
   final User user1;
@@ -32,8 +30,7 @@ class _ChatRoomState extends State<ChatRoom> {
     if (widget.user1.uid.compareTo(widget.user2.uid) > 0) {
       roomId = widget.user2.uid + widget.user1.uid;
     }
-    // print('room id: $roomId');
-    // ThemeData.primaryColor = Colors.blue;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: ColorMap().choiceColorMap[widget.user1.color]['light'],
@@ -41,7 +38,6 @@ class _ChatRoomState extends State<ChatRoom> {
           title: Text('${widget.user2.username}'),
           backgroundColor: ColorMap().choiceColorMap[widget.user1.color]['dark'],
           elevation: 50,
-          // automaticallyImplyLeading: false,
         ),
         body: Stack(
           children: <Widget>[

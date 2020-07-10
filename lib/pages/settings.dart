@@ -4,7 +4,6 @@ import '../models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/colorsmap.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import '../models/authentication.dart';
 
 class Settings extends StatefulWidget {
   final User user;
@@ -144,7 +143,7 @@ class _SettingsState extends State<Settings> {
                         : BoxDecoration(
                             border: Border.all(color: Colors.black),
                             borderRadius: BorderRadius.all(Radius.circular(
-                                    30.0) //         <--- border radius here
+                                    30.0)
                                 ),
                           ),
                     child: FloatingActionButton(
@@ -170,7 +169,7 @@ class _SettingsState extends State<Settings> {
                         : BoxDecoration(
                             border: Border.all(color: Colors.black),
                             borderRadius: BorderRadius.all(Radius.circular(
-                                    30.0) //         <--- border radius here
+                                    30.0)
                                 ),
                           ),
                     child: FloatingActionButton(
@@ -196,7 +195,7 @@ class _SettingsState extends State<Settings> {
                         : BoxDecoration(
                             border: Border.all(color: Colors.black),
                             borderRadius: BorderRadius.all(Radius.circular(
-                                    30.0) //         <--- border radius here
+                                    30.0)
                                 ),
                           ),
                     child: FloatingActionButton(
@@ -222,7 +221,7 @@ class _SettingsState extends State<Settings> {
                         : BoxDecoration(
                             border: Border.all(color: Colors.black),
                             borderRadius: BorderRadius.all(Radius.circular(
-                                    30.0) //         <--- border radius here
+                                    30.0)
                                 ),
                           ),
                     child: FloatingActionButton(

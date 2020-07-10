@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'searchpage.dart';
 import '../pages/settings.dart';
-// import '../models/authentication.dart';
 
 class Home extends StatefulWidget {
   final User user;
@@ -21,7 +20,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool loading = false;
   final databaseReference = Firestore.instance;
-  // int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +69,6 @@ class _HomeState extends State<Home> {
                         trailing: RaisedButton(
                           elevation: 40,
                           textColor: Colors.white,
-
-                          // disabledColor: ColorMap()
-                          //     .choiceColorMap[widget.user.color]['dark'],
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
                               side: BorderSide(
@@ -123,7 +118,9 @@ class _HomeState extends State<Home> {
                           )));
             },
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           FloatingActionButton(
             heroTag: null,
             child: Icon(
@@ -132,12 +129,10 @@ class _HomeState extends State<Home> {
             ),
             backgroundColor: ColorMap().choiceColorMap[widget.user.color]
                 ['dark'],
-            onPressed: () {
-            },
+            onPressed: () {},
           ),
         ],
       ),
-      // floatingActionButton:
     );
   }
 
@@ -164,7 +159,5 @@ class _HomeState extends State<Home> {
     }
     print(ll.length);
     yield ll;
-    // setState(() {
-    // });
   }
 }
