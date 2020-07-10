@@ -87,7 +87,7 @@ class _ChatRoomState extends State<ChatRoom> {
                       IconButton(
                         icon: Icon(Icons.send),
                         iconSize: 30,
-                        color: Colors.green,
+                        color: Colors.white,
                         onPressed: () async {
                           setState(() {
                             sendMessage();

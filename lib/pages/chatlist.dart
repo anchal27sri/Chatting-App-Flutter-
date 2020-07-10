@@ -9,7 +9,6 @@ class ChatListWidget extends StatelessWidget {
   final User chatWithUser;
   ChatListWidget({this.roomId, this.curUser, this.chatWithUser});
 
-  // final ScrollController listScrollController = new ScrollController();
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -59,7 +58,7 @@ class ChatListWidget extends StatelessWidget {
                         : BorderRadius.only(
                             topLeft: Radius.circular(15.0),
                             bottomRight: Radius.circular(15.0)),
-                    color: (mp['uid'] == curUser.uid)?ColorMap().choiceColorMap[curUser.color]['normal']:ColorMap().choiceColorMap[chatWithUser.color]['normal'],
+                    color: (mp['uid'] == curUser.uid)?ColorMap().choiceColorMap[curUser.color]['dark']:ColorMap().choiceColorMap[chatWithUser.color]['normal'],
                   ),
                   child: Column(
                     crossAxisAlignment: (mp['uid'] == curUser.uid)
@@ -105,7 +104,7 @@ class ChatListWidget extends StatelessWidget {
                           textAlign: TextAlign.end,
                           style: TextStyle(
                             fontSize: 10,
-                            color: Colors.blue[900],fontWeight: FontWeight.bold),
+                            color: Colors.grey,fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],

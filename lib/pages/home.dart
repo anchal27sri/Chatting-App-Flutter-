@@ -1,11 +1,12 @@
+import 'package:chatting_app/models/colorsmap.dart';
 import 'package:chatting_app/pages/chatroom.dart';
 import 'package:chatting_app/pages/searchpage.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'searchpage.dart';
+import '../pages/settings.dart';
 
 class Home extends StatefulWidget {
   final User user;
@@ -27,23 +28,22 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
         title: Text('Your Friends'),
-        backgroundColor: Colors.blue[900],
+        backgroundColor: ColorMap().choiceColorMap[widget.user.color]['dark'],
         automaticallyImplyLeading: false,
         actions: <Widget>[
-          FlatButton.icon(
+          FlatButton(
             onPressed: () async {
-              setState(() {
-                loading = true;
-              });
-              await signOut(widget.auth);
-              setState(() {
-                loading = false;
-              });
-              print('popping');
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Settings(
+                      user: widget.user,
+                      auth: widget.auth,
+                      fn: setState,
+                    ),
+                  ));
             },
-            icon: Icon(Icons.person),
-            label: Text('Logout'),
+            child: Icon(Icons.settings),
           ),
         ],
       ),
@@ -54,21 +54,33 @@ class _HomeState extends State<Home> {
               return ListView.separated(
                   itemCount: snapshot.data.length,
                   separatorBuilder: (BuildContext context, int index) =>
-                      Divider(height: 3, color: Colors.grey),
+                      Divider(
+                        height: 2,
+                        color: ColorMap().choiceColorMap[widget.user.color]
+                            ['dark'],
+                      ),
                   itemBuilder: (context, index) {
                     final item = snapshot.data[index];
                     return Container(
-                      color: Colors.blue,
+                      color: ColorMap().choiceColorMap[widget.user.color]
+                          ['light'],
                       child: ListTile(
                         leading: Icon(Icons.account_circle),
                         title: Text('${item.username}'),
-                        trailing: FlatButton(
+                        trailing: RaisedButton(
+                          elevation: 40,
                           textColor: Colors.white,
-                          disabledColor: Colors.blue[200],
+
+                          // disabledColor: ColorMap()
+                          //     .choiceColorMap[widget.user.color]['dark'],
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.blue[900])),
-                          color: Colors.blue,
+                              side: BorderSide(
+                                  color: ColorMap()
+                                          .choiceColorMap[widget.user.color]
+                                      ['dark'])),
+                          color: ColorMap().choiceColorMap[widget.user.color]
+                              ['dark'],
                           onPressed: () {
                             print(widget.user.color);
                             print(item.color);
@@ -89,33 +101,43 @@ class _HomeState extends State<Home> {
               return Center(child: CircularProgressIndicator());
             }
           }),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.add,
-          size: 40,
-        ),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => SearchPage(
-                        user: widget.user,
-                        fn: setState,
-                      )));
-        },
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FloatingActionButton(
+            heroTag: null,
+            child: Icon(
+              Icons.person_add,
+              size: 40,
+            ),
+            backgroundColor: ColorMap().choiceColorMap[widget.user.color]
+                ['dark'],
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SearchPage(
+                            user: widget.user,
+                            fn: setState,
+                          )));
+            },
+          ),
+          SizedBox(height: 10,),
+          FloatingActionButton(
+            heroTag: null,
+            child: Icon(
+              Icons.group_add,
+              size: 40,
+            ),
+            backgroundColor: ColorMap().choiceColorMap[widget.user.color]
+                ['dark'],
+            onPressed: () {
+            },
+          ),
+        ],
       ),
+      // floatingActionButton:
     );
-  }
-
-  Future<void> signOut(FirebaseAuth auth) async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('email', 'email');
-      prefs.setString('password', 'password');
-      return await auth.signOut();
-    } catch (e) {
-      print(e.toString());
-    }
   }
 
   Stream<List<User>> getAllUsers() async* {

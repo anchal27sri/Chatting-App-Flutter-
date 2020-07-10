@@ -193,6 +193,6 @@ class _SignUpState extends State<SignUp> {
       'friends': List<dynamic>(),
       'color': 'Blue',
     });
-    return User(username: _username, uid: fuser.uid, email: fuser.email);
+    return User(username: _username, uid: fuser.uid, email: fuser.email,color: 'Blue');
   }
 }

@@ -1,3 +1,4 @@
+import 'package:chatting_app/models/colorsmap.dart';
 import 'package:flutter/material.dart';
 import 'package:chatting_app/services/searchservice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -53,8 +54,10 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorMap().choiceColorMap[widget.user.color]['light'],
       appBar: AppBar(
         title: Text('Search Friends'),
+        backgroundColor: ColorMap().choiceColorMap[widget.user.color]['dark'],
       ),
       body: ListView(children: <Widget>[
         Padding(
