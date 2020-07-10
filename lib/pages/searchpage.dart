@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:chatting_app/services/searchservice.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user.dart';
+// import '../models/authentication.dart';
 
 class SearchPage extends StatefulWidget {
   final User user;

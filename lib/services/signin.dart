@@ -39,7 +39,17 @@ class _SignInState extends State<SignIn> {
                 child: ListView(
                   children: <Widget>[
                     SizedBox(
-                      height: 40,
+                      height: 30,
+                    ),
+                    Container(
+                      child: Center(
+                          child: Text(
+                        'Sign In',
+                        style: TextStyle(fontSize: 40.0),
+                      )),
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -159,7 +169,9 @@ class _SignInState extends State<SignIn> {
         setState(() {
           loading = false;
         });
-        Navigator.push(
+        // Authenticate(user: user, auth: _auth);
+        // Authenticate().user = user;
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => Home(

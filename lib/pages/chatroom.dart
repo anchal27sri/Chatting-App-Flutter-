@@ -4,6 +4,7 @@ import '../models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:random_string/random_string.dart';
 import 'package:chatting_app/models/colorsmap.dart';
+// import '../models/authentication.dart';
 // import 'package:quiver/time.dart';
 
 class ChatRoom extends StatefulWidget {

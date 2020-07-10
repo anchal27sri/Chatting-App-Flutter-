@@ -4,6 +4,7 @@ import '../models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/colorsmap.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import '../models/authentication.dart';
 
 class Settings extends StatefulWidget {
   final User user;

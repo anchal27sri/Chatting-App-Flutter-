@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'searchpage.dart';
 import '../pages/settings.dart';
+// import '../models/authentication.dart';
 
 class Home extends StatefulWidget {
   final User user;
