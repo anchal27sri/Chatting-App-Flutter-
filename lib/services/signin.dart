@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../pages/home.dart';
 import 'signup.dart';
 import '../models/loading.dart';
@@ -13,10 +12,10 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  bool loading = false;
+  bool loading = false; // bool variable for showing the loading screen
   String error;
   String _email, _password;
-  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formkey = GlobalKey<FormState>(); // form key for Form widget that wraps the List of TextFormField
   final databaseReference = Firestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -30,15 +29,15 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return loading
-        ? Loading()
-        : SafeArea(
+        ? Loading() // loading = true => show loading page, otherwise show scaffold
+        : SafeArea( // safe area for preventing cut off screens
             child: Scaffold(
               backgroundColor: Colors.white,
-              body: Form(
+              body: Form( // by wrapping in a form widget, we can validate all the TextFormFields at once before editing database
                 key: _formkey,
-                child: ListView(
+                child: ListView( // to make it scrollable
                   children: <Widget>[
-                    SizedBox(
+                    SizedBox( // sized boxes are used to separate elements
                       height: 30,
                     ),
                     Container(
@@ -62,7 +61,7 @@ class _SignInState extends State<SignIn> {
                           return null;
                         },
                         decoration: InputDecoration(
-                            labelText: 'Email',
+                            labelText: 'Email', 
                             border: OutlineInputBorder(
                                 )),
                         onSaved: (input) => (_email = input),
@@ -141,17 +140,14 @@ class _SignInState extends State<SignIn> {
   }
 
   Future<void> signIn() async {
-    final formstate = _formkey.currentState;
+    final formstate = _formkey.currentState; // saving the current state of the form in a new variable
 
     if (formstate.validate()) {
       formstate.save();
       setState(() {
-        loading = true;
+        loading = true; // show loading screen while doing sign in
       });
       try {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('email', _email);
-        prefs.setString('password', _password);
         FirebaseUser fuser = (await _auth.signInWithEmailAndPassword(
                 email: _email, password: _password))
             .user;
@@ -164,6 +160,7 @@ class _SignInState extends State<SignIn> {
         setState(() {
           loading = false;
         });
+        // replace the page with the Home page
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -171,11 +168,10 @@ class _SignInState extends State<SignIn> {
                       user: user,
                       auth: _auth,
                     )));
-        print(user.email);
       } catch (e) {
         error = e.toString();
         setState(() {
-          loading = false;
+          loading = false; // close loading screen after signed in and Home Page is loaded
         });
       }
     }
@@ -188,6 +184,7 @@ class _SignInState extends State<SignIn> {
         .document(fuser.uid)
         .get()
         .then((DocumentSnapshot snapshot) {
+      // each snapshot is contains a data that is a map of the field and information
       Map<String, dynamic> mp = snapshot.data;
       user = User(
         username: mp['username'],
@@ -196,7 +193,6 @@ class _SignInState extends State<SignIn> {
         color: mp['color'],
       );
     });
-    print(user.username);
     return user;
   }
 }

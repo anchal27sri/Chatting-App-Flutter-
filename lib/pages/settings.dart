@@ -6,7 +6,7 @@ import '../models/colorsmap.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Settings extends StatefulWidget {
-  final User user;
+  final User user; 
   final FirebaseAuth auth;
   final Function fn;
   Settings({this.user, this.auth, this.fn});

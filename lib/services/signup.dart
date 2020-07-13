@@ -13,19 +13,19 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   String _email, _password;
   String _username;
-  bool loading = false;
-  bool _isCorrect = true;
+  bool loading = false; // loading value for loading screen. When it is false, loading screen will not be shown and vice versa
+  bool _isCorrect = true; // for checking the email
   String error = "";
-  final databaseReference = Firestore.instance;
+  final databaseReference = Firestore.instance; 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  GlobalKey<FormState> _formkey = GlobalKey<FormState>(); // form key for Form widget that wraps the List of TextFormField
 
   @override
   void initState() {
     super.initState();
-    loading = false;
-    error = "";
+    loading = false; // setting initials for safe side
+    error = ""; // setting initials for safe side
   }
 
   @override

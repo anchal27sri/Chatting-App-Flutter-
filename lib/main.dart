@@ -5,6 +5,7 @@ void main() {
   runApp(MyApp());
 }
 
+// Our first page will always be the sign in page
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
