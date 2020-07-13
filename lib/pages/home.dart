@@ -141,23 +141,17 @@ class _HomeState extends State<Home> {
         .collection('users')
         .document(widget.user.uid)
         .get();
-    print(docRef['email']);
     List<String> uids = List.from(docRef['friends']);
-    print('number of friends: ${uids.length}');
     List<User> ll = List<User>();
     for (int i = 0; i < uids.length; i++) {
-      print('this is it: ${uids[i]}');
       DocumentSnapshot tempDocRef =
           await Firestore.instance.collection('users').document(uids[i]).get();
-      print(tempDocRef['username']);
       ll.add(User(
           color: tempDocRef['color'],
           uid: tempDocRef['uid'],
           username: tempDocRef['username'],
           email: tempDocRef['email']));
-      print(ll.length);
     }
-    print(ll.length);
     yield ll;
   }
 }

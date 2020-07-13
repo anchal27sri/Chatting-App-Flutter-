@@ -293,7 +293,7 @@ class _SettingsState extends State<Settings> {
                       height: 10,
                     ),
                     Text(
-                      'Edit $title}',
+                      'Edit $title',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 20),
                     ),

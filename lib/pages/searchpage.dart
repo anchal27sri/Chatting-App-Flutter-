@@ -28,9 +28,7 @@ class _SearchPageState extends State<SearchPage> {
 
     if (queryResultSet.length == 0 && value.length == 1) {
       SearchService().searchByName(value).then((QuerySnapshot docs) {
-        print(docs.documents.length);
         for (int i = 0; i < docs.documents.length; ++i) {
-          print(docs.documents[i].data['uid']);
           if (docs.documents[i].data['uid'] != widget.user.uid) {
             queryResultSet.add(docs.documents[i].data);
             setState(() {
@@ -107,9 +105,7 @@ class _SearchPageState extends State<SearchPage> {
       trailing: IconButton(
         icon: Icon(Icons.add_circle),
         onPressed: () async {
-          print(data['uid']);
-          print(widget.user.uid);
-          databaseReference
+          await databaseReference
               .collection('users')
               .document(widget.user.uid)
               .updateData({'friends': FieldValue.arrayUnion(l)});

@@ -142,8 +142,6 @@ class _SignInState extends State<SignIn> {
 
   Future<void> signIn() async {
     final formstate = _formkey.currentState;
-    print('hello');
-    print(_email);
 
     if (formstate.validate()) {
       formstate.save();
@@ -157,13 +155,11 @@ class _SignInState extends State<SignIn> {
         FirebaseUser fuser = (await _auth.signInWithEmailAndPassword(
                 email: _email, password: _password))
             .user;
-        print('1:' + fuser.toString());
         dynamic user = await fetchUserData(fuser).then((value) {
           return value;
         }, onError: (er) {
           print(er);
         });
-        print(user.email);
         error = "";
         setState(() {
           loading = false;
@@ -178,7 +174,6 @@ class _SignInState extends State<SignIn> {
         print(user.email);
       } catch (e) {
         error = e.toString();
-        print("here");
         setState(() {
           loading = false;
         });
@@ -194,7 +189,6 @@ class _SignInState extends State<SignIn> {
         .get()
         .then((DocumentSnapshot snapshot) {
       Map<String, dynamic> mp = snapshot.data;
-      // print(mp);
       user = User(
         username: mp['username'],
         email: _email,

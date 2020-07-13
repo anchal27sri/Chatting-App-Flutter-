@@ -157,9 +157,7 @@ class _SignUpState extends State<SignUp> {
         dynamic user = await registerUser(fuser).then((value) {
           return value;
         }, onError: (er) {
-          print(er);
         });
-        print('registered!');
         setState(() {
           loading = false;
         });
@@ -170,21 +168,17 @@ class _SignUpState extends State<SignUp> {
                       user: user,
                       auth: _auth,
                     )));
-        print(user.email);
         
       } catch (e) {
         setState(() {
           _isCorrect = false;
           loading = false;
         });
-        print(e.message);
-        print("here");
       }
     }
   }
 
   Future<User> registerUser(FirebaseUser fuser) async {
-    print('registering');
     await databaseReference.collection("users").document(fuser.uid).setData({
       'username': _username,
       'uid': fuser.uid,

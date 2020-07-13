@@ -103,12 +103,10 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   Future<void> sendMessage() async {
-    print('sending..');
     final formstate = _formkey.currentState;
     if (formstate.validate()) {
       formstate.save();
       try {
-        print(_messageInput);
         tec.clear();
         await databaseReference
             .collection('chatrooms')
