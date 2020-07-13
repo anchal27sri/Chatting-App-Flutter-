@@ -30,6 +30,7 @@ class _SearchPageState extends State<SearchPage> {
       SearchService().searchByName(value).then((QuerySnapshot docs) {
         print(docs.documents.length);
         for (int i = 0; i < docs.documents.length; ++i) {
+          print(docs.documents[i].data['uid']);
           if (docs.documents[i].data['uid'] != widget.user.uid) {
             queryResultSet.add(docs.documents[i].data);
             setState(() {
