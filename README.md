@@ -25,7 +25,7 @@ This is an android application made in flutter. This application can be used for
 5. Settings: Click on the 'settings' button present at the top right corner in the app bar. In the settings page, you can edit your email and username by clicking on the pencil icon. You can also choose your color from there.
 6. Logout: The logout button is present at the bottom of the settings page.
 
-For Developers:
+## For Developers:
 
 ### Technologies used in this preoject: 
 1. Platform: Flutter (version 1.17.5)
@@ -34,7 +34,7 @@ For Developers:
 4. Recorder: Android Emulator
 5. Database: Firebase (have to be included as a dependency)
 
-Widgets used: 
+### Widgets used: 
 1. Scaffold (to have a general layout of the structure of the app)
 2. AppBar (to display options, actions and current page)
 4. FloatingActionButton (to add item to a list)
