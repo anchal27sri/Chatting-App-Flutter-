@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../pages/home.dart';
-import 'signup.dart';
-import '../models/loading.dart';
-import '../models/user.dart';
+import 'package:chatting_app/pages/home.dart';
+import 'package:chatting_app/services/signup.dart';
+import 'package:chatting_app/models/loading.dart';
+import 'package:chatting_app/models/user.dart';
 
 class SignIn extends StatefulWidget {
   @override

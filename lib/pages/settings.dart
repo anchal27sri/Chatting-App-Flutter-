@@ -1,8 +1,8 @@
 import 'package:chatting_app/services/signin.dart';
 import 'package:flutter/material.dart';
-import '../models/user.dart';
+import 'package:chatting_app/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../models/colorsmap.dart';
+import 'package:chatting_app/models/colorsmap.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Settings extends StatefulWidget {
